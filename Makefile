@@ -3,6 +3,12 @@
 PWSH ?= pwsh
 WINDOWS_BUILD_SCRIPT := scripts/build-windows.ps1
 
+ifeq ($(OS),Windows_NT)
+PWSH_CHECK = @where $(PWSH) >nul 2>&1 || (echo ❌ PowerShell '$(PWSH)' not found. Install pwsh to continue. && exit /b 1)
+else
+PWSH_CHECK = @command -v $(PWSH) >/dev/null 2>&1 || { echo "❌ PowerShell '$(PWSH)' not found. Install pwsh to continue."; exit 1; }
+endif
+
 help: ## Show this help message
 	@echo "VibeProxy - macOS Menu Bar App"
 	@echo ""
@@ -79,11 +85,11 @@ windows-help: ## Show prerequisites for Windows builds
 	@echo "Run 'make windows-build' or 'make windows-release' from Windows to produce artifacts in windows/out/."
 
 windows-build: ## Build Windows artifacts in Debug configuration via PowerShell script
-	@command -v $(PWSH) >/dev/null 2>&1 || { echo "❌ PowerShell '$(PWSH)' not found. Install pwsh to continue."; exit 1; }
+	$(PWSH_CHECK)
 	@$(PWSH) -NoProfile -ExecutionPolicy Bypass -File $(WINDOWS_BUILD_SCRIPT) -Configuration Debug
 
 windows-release: ## Build Windows artifacts in Release configuration via PowerShell script
-	@command -v $(PWSH) >/dev/null 2>&1 || { echo "❌ PowerShell '$(PWSH)' not found. Install pwsh to continue."; exit 1; }
+	$(PWSH_CHECK)
 	@$(PWSH) -NoProfile -ExecutionPolicy Bypass -File $(WINDOWS_BUILD_SCRIPT) -Configuration Release
 
 # Shortcuts
