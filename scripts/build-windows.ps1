@@ -23,7 +23,12 @@ function Get-CliproxyDownloadUrl {
     }
 
     $asset = $release.assets |
-        Where-Object { $_.name -match "win" -and $_.name -match "x64" -and $_.name -like "*.zip" } |
+        Where-Object {
+            $_.name -like "*.zip" -and
+            ($_.name -match "win" -or $_.name -match "windows") -and
+            ($_.name -match "x64" -or $_.name -match "amd64")
+        } |
+        Sort-Object -Property name |
         Select-Object -First 1
 
     if (-not $asset) {
