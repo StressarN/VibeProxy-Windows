@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeProxy.Windows", "src\\VibeProxy.Windows\\VibeProxy.Windows.csproj", "{A6C27A94-AE73-4B81-B4AD-079BFEF3F20A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeProxy.Windows.Tests", "tests\\VibeProxy.Windows.Tests\\VibeProxy.Windows.Tests.csproj", "{55D1F6B2-630B-4680-86A2-938040A19C37}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6C27A94-AE73-4B81-B4AD-079BFEF3F20A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6C27A94-AE73-4B81-B4AD-079BFEF3F20A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6C27A94-AE73-4B81-B4AD-079BFEF3F20A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6C27A94-AE73-4B81-B4AD-079BFEF3F20A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55D1F6B2-630B-4680-86A2-938040A19C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55D1F6B2-630B-4680-86A2-938040A19C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55D1F6B2-630B-4680-86A2-938040A19C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55D1F6B2-630B-4680-86A2-938040A19C37}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3EA79C17-732E-4263-8D67-EB76B0AE7F42}
+	EndGlobalSection
+EndGlobal

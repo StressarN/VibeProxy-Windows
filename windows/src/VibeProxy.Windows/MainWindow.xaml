@@ -1,0 +1,120 @@
+<Window x:Class="VibeProxy.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:VibeProxy.Windows"
+        Title="VibeProxy"
+        Width="520"
+        Height="640"
+        ResizeMode="CanMinimize">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Top">
+            <Border Padding="16" BorderBrush="#DDD" BorderThickness="1" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="Server status" FontWeight="Bold" />
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding ServerStatusText}" VerticalAlignment="Center" />
+                        <Button Content="Toggle" Width="100" Grid.Column="1" Click="OnToggleServer" />
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                        <CheckBox Content="Launch at login"
+                                  IsChecked="{Binding LaunchAtLoginEnabled, Mode=OneWay}"
+                                  Click="OnLaunchAtLoginClick" />
+                        <Button Content="Open auth folder" Margin="12,0,0,0" Click="OnOpenAuthFolder" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Margin="0,16,0,0">
+                <TextBlock Text="Services" FontWeight="Bold" FontSize="14" />
+                <StackPanel Margin="0,8,0,0">
+                    <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Claude Code" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding ClaudeStatus.DisplayText}" FontSize="12" Foreground="Gray" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Connecting..." Visibility="{Binding IsAuthenticatingClaude, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <Button Content="Connect" Visibility="{Binding ClaudeStatus.IsAuthenticated, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Click="OnConnectClaude" Margin="0,0,8,0" />
+                                <Button Content="Disconnect" Visibility="{Binding ClaudeStatus.IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}" Click="OnDisconnectClaude" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Codex" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding CodexStatus.DisplayText}" FontSize="12" Foreground="Gray" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Connecting..." Visibility="{Binding IsAuthenticatingCodex, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <Button Content="Connect" Visibility="{Binding CodexStatus.IsAuthenticated, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Click="OnConnectCodex" Margin="0,0,8,0" />
+                                <Button Content="Disconnect" Visibility="{Binding CodexStatus.IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}" Click="OnDisconnectCodex" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Gemini" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding GeminiStatus.DisplayText}" FontSize="12" Foreground="Gray" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Connecting..." Visibility="{Binding IsAuthenticatingGemini, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <Button Content="Connect" Visibility="{Binding GeminiStatus.IsAuthenticated, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Click="OnConnectGemini" Margin="0,0,8,0" />
+                                <Button Content="Disconnect" Visibility="{Binding GeminiStatus.IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}" Click="OnDisconnectGemini" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="6" Padding="12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Qwen" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding QwenStatus.DisplayText}" FontSize="12" Foreground="Gray" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Connecting..." Visibility="{Binding IsAuthenticatingQwen, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <Button Content="Connect" Visibility="{Binding QwenStatus.IsAuthenticated, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Click="OnConnectQwen" Margin="0,0,8,0" />
+                                <Button Content="Disconnect" Visibility="{Binding QwenStatus.IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}" Click="OnDisconnectQwen" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Margin="0,16,0,0">
+                <TextBlock Text="Logs" FontWeight="Bold" />
+                <ListBox ItemsSource="{Binding LogLines}" Height="160" Margin="0,6,0,0" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding VersionText}" FontSize="11" Foreground="Gray" HorizontalAlignment="Center" Margin="0,16,0,0" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>
