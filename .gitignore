@@ -8,6 +8,31 @@ xcuserdata/
 *.xcworkspace
 *.xcodeproj
 
+# Windows Build
+windows/out
+windows/src/VibeProxy.Windows
+
+# .NET Build Artifacts
+**/bin/
+**/obj/
+*.user
+*.suo
+*.cache
+.vs/
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+**/packages/
+!**/packages/build/
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+
 # App Bundle
 *.app
 *.zip
