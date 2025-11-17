@@ -1,6 +1,6 @@
 # Changelog
 
-> **Note:** This project is now **Windows-only**. The changelog below reflects the historical development when this was a macOS application. For Windows-specific changes, see future releases.
+> **Note:** This Windows port is maintained by **StressarN**. Special thanks to [Automaze](https://automaze.io) for creating the original VibeProxy project for macOS! The changelog below reflects the historical development from the original macOS application. For Windows-specific changes, see future releases.
 
 All notable changes to VibeProxy will be documented in this file.
 

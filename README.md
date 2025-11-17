@@ -5,10 +5,9 @@
 </p>
 
 <p align="center">
-<a href="https://automaze.io" rel="nofollow"><img alt="Automaze" src="https://img.shields.io/badge/By-automaze.io-4b3baf" style="max-width: 100%;"></a>
-<a href="https://github.com/automazeio/vibeproxy/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-28a745" style="max-width: 100%;"></a>
-<a href="http://x.com/intent/follow?screen_name=aroussi" rel="nofollow"><img alt="Follow on 𝕏" src="https://img.shields.io/badge/Follow-%F0%9D%95%8F/@aroussi-1c9bf0" style="max-width: 100%;"></a>
-<a href="https://github.com/automazeio/vibeproxy"><img alt="Star this repo" src="https://img.shields.io/github/stars/automazeio/vibeproxy.svg?style=social&amp;label=Star%20this%20repo&amp;maxAge=60" style="max-width: 100%;"></a></p>
+<a href="https://github.com/StressarN/vibeproxy-windows"><img alt="By StressarN" src="https://img.shields.io/badge/By-StressarN-4b3baf" style="max-width: 100%;"></a>
+<a href="https://github.com/StressarN/vibeproxy-windows/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-28a745" style="max-width: 100%;"></a>
+<a href="https://github.com/StressarN/vibeproxy-windows"><img alt="Star this repo" src="https://img.shields.io/github/stars/StressarN/vibeproxy-windows.svg?style=social&amp;label=Star%20this%20repo&amp;maxAge=60" style="max-width: 100%;"></a></p>
 </p>
 
 **Stop paying twice for AI.** VibeProxy is a native Windows application that lets you use your existing Claude Code, ChatGPT, **Gemini**, and **Qwen** subscriptions with powerful AI coding tools like **[Factory Droids](https://app.factory.ai/r/FM8BJHFQ)** – no separate API keys required.
@@ -47,7 +46,7 @@ Built on [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI), it handles
 
 ### Download Pre-built Release (Recommended)
 
-1. Go to the [**Releases**](https://github.com/automazeio/vibeproxy/releases) page
+1. Go to the [**Releases**](https://github.com/StressarN/vibeproxy-windows/releases) page
 2. Download the latest Windows release package
 3. Extract the ZIP file
 4. Run `VibeProxy.Windows.exe`
@@ -117,6 +116,10 @@ VibeProxy/
 
 ## Credits
 
+This Windows port is maintained by **StressarN**.
+
+**Special thanks to [Automaze](https://automaze.io) for creating the original VibeProxy project!** Their excellent work laid the foundation for this Windows implementation. The original macOS version and concept were brilliantly designed and executed by the Automaze team.
+
 VibeProxy is built on top of [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI), an excellent unified proxy server for AI services.
 
 Special thanks to the CLIProxyAPI project for providing the core functionality that makes VibeProxy possible.
@@ -127,9 +130,9 @@ MIT License - see LICENSE file for details
 
 ## Support
 
-- **Report Issues**: [GitHub Issues](https://github.com/automazeio/vibeproxy/issues)
-- **Website**: [automaze.io](https://automaze.io)
+- **Report Issues**: [GitHub Issues](https://github.com/StressarN/vibeproxy-windows/issues)
+- **Original Project**: [Automaze VibeProxy](https://github.com/automazeio/vibeproxy)
 
 ---
 
-© 2025 [Automaze, Ltd.](https://automaze.io) All rights reserved.
+Windows port © 2025 StressarN. Original VibeProxy © 2025 [Automaze, Ltd.](https://automaze.io)
