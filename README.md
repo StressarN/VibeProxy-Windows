@@ -1,5 +1,9 @@
 # VibeProxy for Windows
 
+> [!WARNING]
+> **⚠️ HIGHLY EXPERIMENTAL BUT FUNCTIONAL**  
+> This is an experimental Windows port that is actively under development. While it is functional and can be used, expect potential bugs and breaking changes. Use at your own risk and please report any issues you encounter!
+
 <p align="center">
   <img src="icon.png" width="128" height="128" alt="VibeProxy Icon">
 </p>
