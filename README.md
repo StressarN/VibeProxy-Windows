@@ -11,7 +11,8 @@
 <p align="center">
 <a href="https://github.com/StressarN/vibeproxy-windows"><img alt="By StressarN" src="https://img.shields.io/badge/By-StressarN-4b3baf" style="max-width: 100%;"></a>
 <a href="https://github.com/StressarN/vibeproxy-windows/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-28a745" style="max-width: 100%;"></a>
-<a href="https://github.com/StressarN/vibeproxy-windows"><img alt="Star this repo" src="https://img.shields.io/github/stars/StressarN/vibeproxy-windows.svg?style=social&amp;label=Star%20this%20repo&amp;maxAge=60" style="max-width: 100%;"></a></p>
+<a href="https://github.com/StressarN/vibeproxy-windows"><img alt="Star this repo" src="https://img.shields.io/github/stars/StressarN/vibeproxy-windows.svg?style=social&amp;label=Star%20this%20repo&amp;maxAge=60" style="max-width: 100%;"></a>
+<a href="http://x.com/intent/follow?screen_name=StressarN" rel="nofollow"><img alt="Follow on 𝕏" src="https://img.shields.io/badge/Follow-%F0%9D%95%8F/@StressarN-1c9bf0" style="max-width: 100%;"></a>
 </p>
 
 **Stop paying twice for AI.** VibeProxy is a native Windows application that lets you use your existing Claude Code, ChatGPT, **Gemini**, and **Qwen** subscriptions with powerful AI coding tools like **[Factory Droids](https://app.factory.ai/r/FM8BJHFQ)** – no separate API keys required.
