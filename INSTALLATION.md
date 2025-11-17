@@ -1,34 +1,34 @@
-# Installing VibeProxy
+# Installing VibeProxy for Windows
 
-**⚠️ Requirements:** macOS running on **Apple Silicon only** (M1/M2/M3/M4 Macs). Intel Macs are not supported.
+**⚠️ Requirements:** Windows 10 or later with .NET Desktop Runtime 8.0+
 
 ## Option 1: Download Pre-built Release (Recommended)
 
 ### Step 1: Download
 
 1. Go to the [**Releases**](https://github.com/automazeio/vibeproxy/releases) page
-2. Download the latest `VibeProxy.zip`
-3. Extract the ZIP file
+2. Download the latest Windows release package (`VibeProxy-Windows-vX.X.X.zip`)
+3. Extract the ZIP file to a folder of your choice
 
-### Step 2: Install
+### Step 2: Install .NET Runtime (if needed)
 
-**Choose your preferred method:**
+VibeProxy requires .NET Desktop Runtime 8.0 or later.
 
-**Via ZIP:**
-1. Drag `VibeProxy.app` to your `/Applications` folder
-2. Double-click to launch
+**Check if you have it:**
+```powershell
+dotnet --list-runtimes
+```
 
-**Via DMG (if available):**
-1. Double-click `VibeProxy.dmg` to mount
-2. Drag `VibeProxy.app` to the Applications folder shortcut
-3. Eject the DMG
-4. Launch VibeProxy from Applications
+**If you need to install it:**
+1. Download from [Microsoft .NET Download](https://dotnet.microsoft.com/download/dotnet/8.0)
+2. Select ".NET Desktop Runtime 8.0" for Windows
+3. Run the installer
 
 ### Step 3: Launch
 
-Double-click `VibeProxy.app` - it will launch immediately with no warnings! ✅
-
-**Why?** VibeProxy releases are **code signed** with an Apple Developer ID and **notarized** by Apple, ensuring a seamless installation experience.
+1. Navigate to the extracted folder
+2. Double-click `VibeProxy.Windows.exe` to launch
+3. If Windows SmartScreen appears, click "More info" → "Run anyway"
 
 ---
 
@@ -36,62 +36,82 @@ Double-click `VibeProxy.app` - it will launch immediately with no warnings! ✅
 
 ### Prerequisites
 
-- macOS 13.0 (Ventura) or later
-- Swift 5.9+
-- Xcode Command Line Tools
+- Windows 10 or later
+- .NET SDK 8.0 or later
+- PowerShell 7+ (`pwsh`)
 - Git
+
+### Install Prerequisites
+
+1. **Install .NET SDK 8.0**
+   - Download from [Microsoft .NET Download](https://dotnet.microsoft.com/download/dotnet/8.0)
+   - Run the installer
+
+2. **Install PowerShell 7+ (if needed)**
+   ```powershell
+   winget install Microsoft.PowerShell
+   ```
+
+3. **Install Git (if needed)**
+   ```powershell
+   winget install Git.Git
+   ```
 
 ### Build Instructions
 
 1. **Clone the repository**
-   ```bash
+   ```powershell
    git clone https://github.com/automazeio/vibeproxy.git
    cd vibeproxy
    ```
 
-2. **Build the app**
-   ```bash
-   ./create-app-bundle.sh
+2. **Build the application**
+   ```powershell
+   # Using PowerShell script directly
+   pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build-windows.ps1 -Configuration Release
+
+   # Or using Make (if you have make installed)
+   make release
    ```
 
    This will:
-   - Build the Swift executable in release mode
+   - Build the Windows WPF application
    - Download and bundle CLIProxyAPI
-   - Create `VibeProxy.app`
-   - Sign it with your Developer ID (if available)
+   - Create a self-contained executable
+   - Output to `out/publish/`
 
-3. **Install**
-   ```bash
-   # Move to Applications folder
-   mv VibeProxy.app /Applications/
-
-   # Or run directly
-   open VibeProxy.app
+3. **Run the application**
+   ```powershell
+   cd out/publish
+   .\VibeProxy.Windows.exe
    ```
 
 ### Build Commands
 
-```bash
-# Quick build and run
-make run
+```powershell
+# Build in Release mode (recommended)
+make release
 
-# Build .app bundle
-make app
-
-# Install to /Applications
-make install
+# Build in Debug mode
+make build
 
 # Clean build artifacts
 make clean
+
+# Show project info
+make info
 ```
 
-### Code Signing (Optional)
+### Build Options
 
-If you have an Apple Developer account, the build script will automatically detect and use your Developer ID certificate for signing.
+The build script supports various configurations:
 
-To manually specify a certificate:
-```bash
-CODESIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)" ./create-app-bundle.sh
+```powershell
+# Release build (optimized, smaller size)
+pwsh scripts/build-windows.ps1 -Configuration Release
+
+# Debug build (with debugging symbols)
+pwsh scripts/build-windows.ps1 -Configuration Debug
 ```
 
 ---
@@ -108,15 +128,15 @@ Only download from the official [GitHub Releases](https://github.com/automazeio/
 
 Each release includes SHA-256 checksums:
 
-```bash
+```powershell
 # Download the checksum file
-curl -LO https://github.com/automazeio/vibeproxy/releases/download/vX.X.X/VibeProxy.zip.sha256
+curl -LO https://github.com/automazeio/vibeproxy/releases/download/vX.X.X/VibeProxy-Windows.zip.sha256
 
-# Verify the download
-shasum -a 256 -c VibeProxy.zip.sha256
+# Verify the download (PowerShell)
+$hash = (Get-FileHash VibeProxy-Windows.zip -Algorithm SHA256).Hash
+$expected = (Get-Content VibeProxy-Windows.zip.sha256).Split(' ')[0]
+if ($hash -eq $expected) { Write-Host "✓ Checksum verified!" } else { Write-Host "✗ Checksum mismatch!" }
 ```
-
-Expected output: `VibeProxy.zip: OK`
 
 ### 3. Inspect the Code
 
@@ -126,35 +146,67 @@ All source code is available in this repository - feel free to review before bui
 
 ## Troubleshooting
 
-### "App is damaged and can't be opened"
+### "Windows protected your PC" (SmartScreen)
 
-This can happen if download quarantine attributes cause issues:
+This is normal for new applications. Click "More info" → "Run anyway"
 
-```bash
-xattr -cr /Applications/VibeProxy.app
-```
+### .NET Runtime Not Found
 
-Then try opening again.
+**Error**: "To run this application, you must install .NET Desktop Runtime"
+
+**Solution**:
+1. Download [.NET Desktop Runtime 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
+2. Install the x64 version
+3. Restart your computer
+4. Try launching VibeProxy again
 
 ### Build Fails
 
-**Error: Swift not found**
-```bash
-# Install Xcode Command Line Tools
-xcode-select --install
+**Error: dotnet not found**
+```powershell
+# Install .NET SDK
+winget install Microsoft.DotNet.SDK.8
 ```
 
-**Error: Permission denied**
-```bash
-# Make scripts executable
-chmod +x build.sh create-app-bundle.sh
+**Error: pwsh not found**
+```powershell
+# Install PowerShell 7+
+winget install Microsoft.PowerShell
+```
+
+**Error: MSBuild failed**
+- Make sure you have .NET SDK 8.0 or later installed
+- Try cleaning: `make clean` then rebuild
+
+### Port 8317 Already in Use
+
+If you get an error about port 8317 being in use:
+
+```powershell
+# Find what's using the port
+netstat -ano | findstr :8317
+
+# Kill the process (replace PID with actual process ID)
+taskkill /PID <PID> /F
 ```
 
 ### Still Having Issues?
 
-- **Check System Requirements**: macOS 13.0 (Ventura) or later
-- **Check Logs**: Look for errors in Console.app (search for "VibeProxy")
+- **Check System Requirements**: Windows 10 or later, .NET 8.0+
+- **Check Event Viewer**: Look for application errors in Windows Event Viewer
 - **Report an Issue**: [GitHub Issues](https://github.com/automazeio/vibeproxy/issues)
+
+---
+
+## Running on Startup (Optional)
+
+To have VibeProxy start automatically with Windows:
+
+1. Press `Win + R`
+2. Type `shell:startup` and press Enter
+3. Create a shortcut to `VibeProxy.Windows.exe` in this folder
+
+Or use the "Launch at Startup" option in the VibeProxy settings window.
 
 ---
 

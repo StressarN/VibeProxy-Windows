@@ -1,16 +1,5 @@
-# Swift Build
-src/.build/
-*.swiftmodule
-*.swiftdoc
-
-# Xcode
-xcuserdata/
-*.xcworkspace
-*.xcodeproj
-
 # Windows Build
-windows/out
-windows/src/VibeProxy.Windows
+out/
 
 # .NET Build Artifacts
 **/bin/
@@ -33,26 +22,17 @@ windows/src/VibeProxy.Windows
 *.coverage
 *.coveragexml
 
-# App Bundle
-*.app
+# Archives
 *.zip
-*.dmg
 
 # macOS
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Resources (copied during build)
-# cli-proxy-api binary and config are now committed to repo for releases
-# src/Sources/Resources/cli-proxy-api
-# src/Sources/Resources/config.yaml
-src/Sources/Resources/static/
-
-# Icon generation artifacts
-src/Sources/Resources/AppIcon.iconset/
+# Resources (cli-proxy-api binary downloaded during build)
+src/VibeProxy.Windows/Resources/cli-proxy-api.exe
 
 # Logs
 *.log
-test-notarization.sh
 .vscode/settings.json

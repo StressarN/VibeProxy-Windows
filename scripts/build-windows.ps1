@@ -40,10 +40,10 @@ function Get-CliproxyDownloadUrl {
 }
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$solution = Join-Path $repoRoot "windows/VibeProxy.Windows.sln"
-$resourceDir = Join-Path $repoRoot "windows/src/VibeProxy.Windows/Resources"
+$solution = Join-Path $repoRoot "VibeProxy.Windows.sln"
+$resourceDir = Join-Path $repoRoot "src/VibeProxy.Windows/Resources"
 $binaryPath = Join-Path $resourceDir "cli-proxy-api.exe"
-$outputDir = Join-Path $repoRoot "windows/out"
+$outputDir = Join-Path $repoRoot "out"
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 
 $cliproxyDownloadUrl = Get-CliproxyDownloadUrl -OverrideUri $CliproxyUri
@@ -68,7 +68,7 @@ dotnet restore $solution
 dotnet test $solution -c $Configuration
 
 $publishDir = Join-Path $outputDir "publish"
-dotnet publish (Join-Path $repoRoot "windows/src/VibeProxy.Windows/VibeProxy.Windows.csproj") `
+dotnet publish (Join-Path $repoRoot "src/VibeProxy.Windows/VibeProxy.Windows.csproj") `
     -c $Configuration `
     -r win-x64 `
     --self-contained true `

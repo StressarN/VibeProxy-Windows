@@ -1,6 +1,6 @@
-# Using Factory AI with VibeProxy
+# Using Factory AI with VibeProxy for Windows
 
-A simplified guide for using Factory CLI (Droid) with your personal Claude and ChatGPT subscriptions through VibeProxy.
+A simplified guide for using Factory CLI (Droid) with your personal Claude and ChatGPT subscriptions through VibeProxy on Windows.
 
 ## What is This?
 
@@ -16,29 +16,29 @@ VibeProxy manages OAuth tokens, auto-refreshes them, routes requests, and handle
 
 ## Prerequisites
 
-- macOS 13.0+ (Ventura or later)
+- Windows 10 or later
+- .NET Desktop Runtime 8.0+
 - Active **Claude Code Pro/Max** subscription for Anthropic access
 - Active **ChatGPT Plus/Pro** subscription for OpenAI Codex access
-- Factory CLI installed: `curl -fsSL https://app.factory.ai/cli | sh`
+- Factory CLI installed: See [Factory CLI Installation](https://docs.factory.ai/cli)
 
 ## Step 1: Install VibeProxy
 
-1. **Download [VibeProxy.app](https://github.com/automazeio/vibeproxy/releases)** from the releases page or build from source
-2. **Install**: Drag `VibeProxy.app` to your `/Applications` folder
-3. **Launch**: Open VibeProxy from Applications
-   - If macOS blocks it: Right-click → Open, then click "Open" in the dialog
+1. **Download [VibeProxy for Windows](https://github.com/automazeio/vibeproxy/releases)** from the releases page or build from source
+2. **Extract**: Extract the ZIP file to a folder of your choice
+3. **Launch**: Run `VibeProxy.Windows.exe`
+   - If Windows SmartScreen appears: Click "More info" → "Run anyway"
 
 ## Step 2: Connect Your Accounts
 
 Once VibeProxy is running:
 
-1. Click the **VibeProxy menu bar icon**
-2. Select **"Open Settings"**
-3. Click **"Connect"** next to Claude Code
+1. The **VibeProxy main window** will appear
+2. Click **"Connect"** next to Claude Code
    - Your browser will open for authentication
    - Complete the login process
    - VibeProxy will automatically detect when you're authenticated
-4. Click **"Connect"** next to Codex
+3. Click **"Connect"** next to Codex
    - Follow the same browser authentication process
    - Wait for VibeProxy to confirm the connection
 
@@ -192,19 +192,19 @@ Edit your Factory configuration file at `~/.factory/config.json` (if the file do
 
 ## Troubleshooting
 
-### VibeProxy Menu Bar Status
-- **Green dot**: Server is running
-- **Red dot**: Server is stopped
-- **Click the status** to toggle the server on/off
+### VibeProxy Status Display
+- **Running**: Server is active and ready
+- **Stopped**: Server is not running
+- **Start/Stop button**: Click to toggle the server on/off
 
 ### Connection Issues
 
 | Problem | Solution |
 |---------|----------|
-| Can't connect to Claude/Codex | Re-click "Connect" in VibeProxy settings |
-| Factory shows 404 errors | Make sure VibeProxy server is running (check menu bar) |
+| Can't connect to Claude/Codex | Re-click "Connect" in VibeProxy window |
+| Factory shows 404 errors | Make sure VibeProxy server is running (check status) |
 | Authentication expired | Disconnect and reconnect the service in VibeProxy |
-| Port 8317 already in use | Quit any other instances of VibeProxy or CLIProxyAPI |
+| Port 8317 already in use | Close any other instances of VibeProxy or CLIProxyAPI. Use `netstat -ano \| findstr :8317` to find the process |
 
 ### Verification Checklist
 
@@ -258,9 +258,9 @@ This works seamlessly with Factory CLI - just select the thinking variant in you
 
 ## Tips
 
-- **Launch at Login**: Enable in VibeProxy settings to auto-start the server
-- **Auth Folder**: Click "Open Folder" in settings to view authentication tokens
-- **Server Control**: VibeProxy automatically stops the server and releases port 8317 when you quit
+- **Launch at Startup**: Enable in VibeProxy settings to auto-start with Windows
+- **Auth Folder**: Click "Open Folder" in settings to view authentication tokens (located at `%USERPROFILE%\.cli-proxy-api\`)
+- **Server Control**: VibeProxy automatically stops the server and releases port 8317 when you exit the application
 
 ## Security
 

@@ -1,5 +1,7 @@
 # Changelog
 
+> **Note:** This project is now **Windows-only**. The changelog below reflects the historical development when this was a macOS application. For Windows-specific changes, see future releases.
+
 All notable changes to VibeProxy will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
