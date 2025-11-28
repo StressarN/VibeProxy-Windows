@@ -50,108 +50,100 @@ Edit your Factory configuration file at `~/.factory/config.json` (if the file do
 
 ```json
 {
-  "custom_models": [
-    {
-      "model_display_name": "CC: Opus 4.1",
-      "model": "claude-opus-4-1-20250805",
-      "base_url": "http://localhost:8317",
-      "api_key": "dummy-not-used",
-      "provider": "anthropic"
-    },
-    {
-      "model_display_name": "CC: Sonnet 4.5",
-      "model": "claude-sonnet-4-5-20250929",
-      "base_url": "http://localhost:8317",
-      "api_key": "dummy-not-used",
-      "provider": "anthropic"
-    },
-    {
-      "model_display_name": "CC: Sonnet 4.5 (Think)",
-      "model": "claude-sonnet-4-5-20250929-thinking-4000",
-      "base_url": "http://localhost:8317",
-      "api_key": "dummy-not-used",
-      "provider": "anthropic"
-    },
-    {
-      "model_display_name": "CC: Sonnet 4.5 (Think Harder)",
-      "model": "claude-sonnet-4-5-20250929-thinking-10000",
-      "base_url": "http://localhost:8317",
-      "api_key": "dummy-not-used",
-      "provider": "anthropic"
-    },
-    {
-      "model_display_name": "CC: Sonnet 4.5 (Ultra Think)",
-      "model": "claude-sonnet-4-5-20250929-thinking-32000",
-      "base_url": "http://localhost:8317",
-      "api_key": "dummy-not-used",
-      "provider": "anthropic"
-    },
-
-    {
-      "model_display_name": "GPT-5 Codex",
-      "model": "gpt-5-codex",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5 Codex (Low)",
-      "model": "gpt-5-codex-low",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5 Codex (Medium)",
-      "model": "gpt-5-codex-medium",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5 Codex (High)",
-      "model": "gpt-5-codex-high",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5",
-      "model": "gpt-5",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5 (Minimal)",
-      "model": "gpt-5-minimal",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5 (Low)",
-      "model": "gpt-5-low",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5 (Medium)",
-      "model": "gpt-5-medium",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    },
-    {
-      "model_display_name": "GPT-5 (High)",
-      "model": "gpt-5-high",
-      "base_url": "http://localhost:8317/v1",
-      "api_key": "dummy-not-used",
-      "provider": "openai"
-    }
-  ]
-}
+    "custom_models": [
+      {
+        "model_display_name": "Gemini 3 Pro [Proxy]",
+        "model": "gemini-3-pro-preview",
+        "base_url": "http://localhost:8317",
+        "api_key": "dummy-not-used",
+        "provider": "google"
+      },
+      {
+        "model_display_name": "Claude Haiku 4.5 [Proxy]",
+        "model": "claude-haiku-4-5-20251001",
+        "base_url": "http://localhost:8317",
+        "api_key": "dummy-not-used",
+        "provider": "anthropic"
+      },
+      {
+        "model_display_name": "Claude Sonnet 4.5 [Proxy]",
+        "model": "claude-sonnet-4-5-20250929",
+        "base_url": "http://localhost:8317",
+        "api_key": "dummy-not-used",
+        "provider": "anthropic"
+      },
+      {
+        "model_display_name": "Claude Sonnet 4.5 Ultra [Proxy]",
+        "model": "claude-sonnet-4-5-20250929-thinking-32000",
+        "base_url": "http://localhost:8317",
+        "api_key": "dummy-not-used",
+        "provider": "anthropic"
+      },
+      {
+        "model_display_name": "Claude Opus 4.5 [Proxy]",
+        "model": "claude-opus-4-5-20251101",
+        "base_url": "http://localhost:8317",
+        "api_key": "dummy-not-used",
+        "provider": "anthropic"
+      },
+      {
+        "model_display_name": "GPT-5.1 Low [Proxy]",
+        "model": "gpt-5.1-low",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      },
+      {
+        "model_display_name": "GPT-5.1 Medium [Proxy]",
+        "model": "gpt-5.1-medium",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      },
+      {
+        "model_display_name": "GPT-5.1 High [Proxy]",
+        "model": "gpt-5.1-high",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      },
+      {
+        "model_display_name": "GPT-5.1 Codex Low [Proxy]",
+        "model": "gpt-5.1-codex-low",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      },
+      {
+        "model_display_name": "GPT-5.1 Codex Medium [Proxy]",
+        "model": "gpt-5.1-codex-medium",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      },
+      {
+        "model_display_name": "GPT-5.1 Codex High [Proxy]",
+        "model": "gpt-5.1-codex-high",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      },
+      {
+        "model_display_name": "GPT-5.1 Codex Mini Medium [Proxy]",
+        "model": "gpt-5.1-codex-mini-medium",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      },
+      {
+        "model_display_name": "GPT-5.1 Codex Mini High [Proxy]",
+        "model": "gpt-5.1-codex-mini-high",
+        "base_url": "http://localhost:8317/v1",
+        "api_key": "dummy-not-used",
+        "provider": "openai"
+      }
+    ]
+  }
 ```
 
 ## Step 4: Use Factory CLI
