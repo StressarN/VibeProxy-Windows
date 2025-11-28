@@ -21,6 +21,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Read VERSION file
+        shell: pwsh
+        id: version
+        run: |
+          $versionFile = "VERSION"
+          if (Test-Path $versionFile) {
+            $versionContent = Get-Content $versionFile -Raw
+            $version = $versionContent.Trim()
+            if ($version) {
+              Write-Host "✅ Read version from VERSION file: $version"
+              echo "VERSION_FROM_FILE=$version" >> $env:GITHUB_OUTPUT
+            } else {
+              Write-Host "⚠️ VERSION file is empty, will use fallback"
+              echo "VERSION_FROM_FILE=" >> $env:GITHUB_OUTPUT
+            }
+          } else {
+            Write-Host "⚠️ VERSION file not found, will use fallback"
+            echo "VERSION_FROM_FILE=" >> $env:GITHUB_OUTPUT
+          }
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -84,8 +104,27 @@ jobs:
 
       - name: Create ZIP archive
         shell: pwsh
+        env:
+          VERSION_FROM_FILE: ${{ steps.version.outputs.VERSION_FROM_FILE }}
         run: |
-          $version = if ($env:GITHUB_REF -match 'refs/tags/v(.+)') { $matches[1] } else { "dev" }
+          # Version priority: git tag > VERSION file > "dev"
+          $version = "dev"
+          
+          # Check if this is a git tag push
+          if ($env:GITHUB_REF -match 'refs/tags/v(.+)') {
+            $version = $matches[1]
+            Write-Host "✅ Using version from git tag: $version"
+          }
+          # Otherwise, try to use VERSION file
+          elseif ($env:VERSION_FROM_FILE) {
+            $version = $env:VERSION_FROM_FILE
+            Write-Host "✅ Using version from VERSION file: $version"
+          }
+          # Fallback to "dev"
+          else {
+            Write-Host "⚠️ Using fallback version: $version"
+          }
+          
           $zipName = "VibeProxy-Windows-$version.zip"
           Compress-Archive -Path "out/publish/*" -DestinationPath "out/$zipName"
           Write-Host "✅ Created $zipName"

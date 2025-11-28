@@ -36,3 +36,4 @@ src/VibeProxy.Windows/Resources/cli-proxy-api.exe
 # Logs
 *.log
 .vscode/settings.json
+FACTORY_SETUP.md
