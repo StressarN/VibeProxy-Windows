@@ -1,0 +1,62 @@
+# Dockerfile for cross-compiling VibeProxy Windows x64 from macOS/Linux
+# Uses .NET SDK with Windows targeting pack support
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+WORKDIR /src
+
+# Install required tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    unzip \
+    jq \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy solution and project files first for layer caching
+COPY VibeProxy.Windows.sln .
+COPY src/VibeProxy.Windows/VibeProxy.Windows.csproj src/VibeProxy.Windows/
+COPY tests/VibeProxy.Windows.Tests/VibeProxy.Windows.Tests.csproj tests/VibeProxy.Windows.Tests/
+
+# Restore dependencies with Windows targeting enabled
+RUN dotnet restore VibeProxy.Windows.sln -r win-x64 -p:EnableWindowsTargeting=true
+
+# Copy source code
+COPY src/ src/
+COPY tests/ tests/
+
+# Download cli-proxy-api.exe if not present
+RUN if [ ! -f src/VibeProxy.Windows/Resources/cli-proxy-api.exe ]; then \
+    echo "Downloading cli-proxy-api..." && \
+    mkdir -p src/VibeProxy.Windows/Resources && \
+    RELEASE_JSON=$(curl -s -H "User-Agent: VibeProxy-Windows-Build" \
+        "https://api.github.com/repos/router-for-me/CLIProxyAPI/releases/latest") && \
+    DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test(".*win.*x64.*\\.zip$|.*windows.*x64.*\\.zip$|.*win.*amd64.*\\.zip$")) | .browser_download_url' | head -1) && \
+    if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then \
+        echo "Error: Could not find Windows x64 asset" && exit 1; \
+    fi && \
+    echo "Downloading from: $DOWNLOAD_URL" && \
+    curl -L -H "User-Agent: VibeProxy-Windows-Build" -o /tmp/cliproxy.zip "$DOWNLOAD_URL" && \
+    unzip -o /tmp/cliproxy.zip -d /tmp/cliproxy && \
+    find /tmp/cliproxy -name "cli-proxy-api*.exe" -exec cp {} src/VibeProxy.Windows/Resources/cli-proxy-api.exe \; && \
+    rm -rf /tmp/cliproxy /tmp/cliproxy.zip && \
+    echo "cli-proxy-api.exe downloaded successfully"; \
+    fi
+
+# Build argument for configuration
+ARG CONFIGURATION=Release
+
+# Publish the application
+# Note: For WPF apps, we need to use the Windows targeting pack
+# The SDK includes cross-compilation support for win-x64
+RUN dotnet publish src/VibeProxy.Windows/VibeProxy.Windows.csproj \
+    -c ${CONFIGURATION} \
+    -r win-x64 \
+    --self-contained true \
+    -p:PublishSingleFile=true \
+    -p:EnableWindowsTargeting=true \
+    -o /app/publish
+
+# Create output stage
+FROM scratch AS output
+COPY --from=build /app/publish /
