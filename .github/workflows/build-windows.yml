@@ -1,0 +1,153 @@
+name: Build Windows Release
+
+on:
+  push:
+    branches: [main, develop]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows Application
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore VibeProxy.Windows.sln
+
+      - name: Run tests
+        run: dotnet test VibeProxy.Windows.sln -c Release --no-restore
+
+      - name: Download cli-proxy-api.exe
+        shell: pwsh
+        run: |
+          $resourceDir = "src/VibeProxy.Windows/Resources"
+          $binaryPath = Join-Path $resourceDir "cli-proxy-api.exe"
+          
+          if (-not (Test-Path $binaryPath)) {
+            Write-Host "Downloading cli-proxy-api..."
+            $api = "https://api.github.com/repos/router-for-me/CLIProxyAPI/releases/latest"
+            $headers = @{ "User-Agent" = "VibeProxy-Windows-Build" }
+            $release = Invoke-RestMethod -Uri $api -Headers $headers
+            
+            $asset = $release.assets | Where-Object {
+              $_.name -like "*.zip" -and
+              ($_.name -match "win" -or $_.name -match "windows") -and
+              ($_.name -match "x64" -or $_.name -match "amd64")
+            } | Sort-Object -Property name | Select-Object -First 1
+            
+            if (-not $asset) {
+              throw "Unable to locate Windows x64 asset in CLIProxyAPI release"
+            }
+            
+            $tempZip = New-TemporaryFile
+            Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $tempZip.FullName -Headers $headers
+            $tempExtract = New-Item -ItemType Directory -Path $env:TEMP -Name ([System.Guid]::NewGuid())
+            Expand-Archive -Path $tempZip.FullName -DestinationPath $tempExtract.FullName -Force
+            $downloadedBinary = Get-ChildItem -Path $tempExtract.FullName -Recurse -Filter "cli-proxy-api*.exe" | Select-Object -First 1
+            
+            if (-not $downloadedBinary) {
+              throw "cli-proxy-api executable not found in archive"
+            }
+            
+            New-Item -ItemType Directory -Force -Path $resourceDir | Out-Null
+            Copy-Item $downloadedBinary.FullName $binaryPath -Force
+            Remove-Item $tempZip.FullName -Force
+            Remove-Item $tempExtract.FullName -Force -Recurse
+            Write-Host "✅ cli-proxy-api.exe downloaded successfully"
+          } else {
+            Write-Host "✅ cli-proxy-api.exe already exists"
+          }
+
+      - name: Build Release
+        run: |
+          dotnet publish src/VibeProxy.Windows/VibeProxy.Windows.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -o out/publish
+
+      - name: Create ZIP archive
+        shell: pwsh
+        run: |
+          $version = if ($env:GITHUB_REF -match 'refs/tags/v(.+)') { $matches[1] } else { "dev" }
+          $zipName = "VibeProxy-Windows-$version.zip"
+          Compress-Archive -Path "out/publish/*" -DestinationPath "out/$zipName"
+          Write-Host "✅ Created $zipName"
+          echo "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
+          echo "VERSION=$version" >> $env:GITHUB_ENV
+
+      - name: Calculate checksums
+        shell: pwsh
+        run: |
+          $hash = Get-FileHash -Path "out/$env:ZIP_NAME" -Algorithm SHA256
+          "$($hash.Hash.ToLower())  $env:ZIP_NAME" | Out-File -FilePath "out/$env:ZIP_NAME.sha256" -Encoding ascii
+          Get-Content "out/$env:ZIP_NAME.sha256"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: VibeProxy-Windows-${{ env.VERSION }}
+          path: |
+            out/*.zip
+            out/*.sha256
+          retention-days: 30
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            out/${{ env.ZIP_NAME }}
+            out/${{ env.ZIP_NAME }}.sha256
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## VibeProxy for Windows ${{ env.VERSION }}
+
+            ### Installation
+
+            1. Download `${{ env.ZIP_NAME }}`
+            2. Extract the ZIP file to your preferred location
+            3. Run `VibeProxy.Windows.exe`
+
+            ### Requirements
+
+            - Windows 10 or later
+            - .NET Desktop Runtime 8.0 or later (usually pre-installed)
+
+            ### What's New
+
+            See the [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+
+            ### Verification
+
+            To verify the download integrity:
+            ```powershell
+            # PowerShell
+            $expectedHash = (Get-Content ${{ env.ZIP_NAME }}.sha256).Split()[0]
+            $actualHash = (Get-FileHash ${{ env.ZIP_NAME }} -Algorithm SHA256).Hash.ToLower()
+            if ($expectedHash -eq $actualHash) { Write-Host "✅ Checksum verified" } else { Write-Host "❌ Checksum mismatch" }
+            ```
+
+            ---
+
+            **Built on Windows**: Self-contained executable with all dependencies included
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

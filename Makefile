@@ -1,4 +1,4 @@
-.PHONY: build release clean help info
+.PHONY: build release clean help info docker-build docker-release
 
 PWSH ?= pwsh
 WINDOWS_BUILD_SCRIPT := scripts/build-windows.ps1
@@ -43,6 +43,12 @@ info: ## Show project information
 	@echo ""
 	@echo "Structure:"
 	@tree -L 3 -I "bin|obj|out" || echo "  (install 'tree' for better output)"
+
+docker-build: ## Build Windows artifacts using Docker (Debug)
+	@./scripts/docker-build.sh --debug
+
+docker-release: ## Build Windows artifacts using Docker (Release)
+	@./scripts/docker-build.sh --release
 
 # Shortcuts
 all: release ## Same as 'release'
