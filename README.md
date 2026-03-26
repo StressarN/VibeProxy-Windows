@@ -60,6 +60,12 @@ Built on [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI), it handles
 
 Want to build it yourself? See [**INSTALLATION.md**](INSTALLATION.md) for detailed build instructions.
 
+### Release Automation
+
+- Every pushed commit triggers the GitHub Actions Windows build workflow.
+- Regular branch pushes upload snapshot artifacts named with the version, branch, and commit SHA.
+- Pushing a tag like `v0.2.1` publishes a GitHub Release with the packaged ZIP and checksum files.
+
 ## Usage
 
 ### First Launch

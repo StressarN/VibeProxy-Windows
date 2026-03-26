@@ -2,7 +2,8 @@ name: Build Windows Release
 
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - '**'
     tags:
       - 'v*'
   pull_request:
@@ -107,22 +108,26 @@ jobs:
         env:
           VERSION_FROM_FILE: ${{ steps.version.outputs.VERSION_FROM_FILE }}
         run: |
-          # Version priority: git tag > VERSION file > "dev"
+          # Tagged builds create stable release assets.
+          # Branch builds create snapshot artifacts with branch and commit info.
           $version = "dev"
+          $shortSha = $env:GITHUB_SHA.Substring(0, 7)
+          $refName = $env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._-]', '-'
           
           # Check if this is a git tag push
           if ($env:GITHUB_REF -match 'refs/tags/v(.+)') {
             $version = $matches[1]
             Write-Host "✅ Using version from git tag: $version"
           }
-          # Otherwise, try to use VERSION file
+          # Otherwise, create a snapshot version using the branch and commit.
           elseif ($env:VERSION_FROM_FILE) {
-            $version = $env:VERSION_FROM_FILE
-            Write-Host "✅ Using version from VERSION file: $version"
+            $version = "$($env:VERSION_FROM_FILE)-$refName-$shortSha"
+            Write-Host "✅ Using snapshot version from VERSION file, branch, and commit: $version"
           }
-          # Fallback to "dev"
+          # Fallback to a generic snapshot version.
           else {
-            Write-Host "⚠️ Using fallback version: $version"
+            $version = "dev-$refName-$shortSha"
+            Write-Host "⚠️ Using fallback snapshot version: $version"
           }
           
           $zipName = "VibeProxy-Windows-$version.zip"
