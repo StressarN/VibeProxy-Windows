@@ -30,7 +30,7 @@ RUN if [ ! -f src/VibeProxy.Windows/Resources/cli-proxy-api.exe ]; then \
     echo "Downloading cli-proxy-api..." && \
     mkdir -p src/VibeProxy.Windows/Resources && \
     RELEASE_JSON=$(curl -s -H "User-Agent: VibeProxy-Windows-Build" \
-        "https://api.github.com/repos/router-for-me/CLIProxyAPI/releases/latest") && \
+        "https://api.github.com/repos/router-for-me/CLIProxyAPIPlus/releases/latest") && \
     DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test(".*win.*x64.*\\.zip$|.*windows.*x64.*\\.zip$|.*win.*amd64.*\\.zip$")) | .browser_download_url' | head -1) && \
     if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then \
         echo "Error: Could not find Windows x64 asset" && exit 1; \

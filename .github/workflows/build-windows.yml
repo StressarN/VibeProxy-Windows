@@ -60,7 +60,7 @@ jobs:
           
           if (-not (Test-Path $binaryPath)) {
             Write-Host "Downloading cli-proxy-api..."
-            $api = "https://api.github.com/repos/router-for-me/CLIProxyAPI/releases/latest"
+            $api = "https://api.github.com/repos/router-for-me/CLIProxyAPIPlus/releases/latest"
             $headers = @{ "User-Agent" = "VibeProxy-Windows-Build" }
             $release = Invoke-RestMethod -Uri $api -Headers $headers
             
@@ -71,7 +71,7 @@ jobs:
             } | Sort-Object -Property name | Select-Object -First 1
             
             if (-not $asset) {
-              throw "Unable to locate Windows x64 asset in CLIProxyAPI release"
+              throw "Unable to locate Windows x64 asset in CLIProxyAPIPlus release"
             }
             
             $tempZip = New-TemporaryFile

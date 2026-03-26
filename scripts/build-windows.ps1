@@ -14,12 +14,12 @@ function Get-CliproxyDownloadUrl {
         return $OverrideUri
     }
 
-    $api = "https://api.github.com/repos/router-for-me/CLIProxyAPI/releases/latest"
-    Write-Host "Resolving latest CLIProxyAPI release from $api"
+    $api = "https://api.github.com/repos/router-for-me/CLIProxyAPIPlus/releases/latest"
+    Write-Host "Resolving latest CLIProxyAPIPlus release from $api"
     $headers = @{ "User-Agent" = "VibeProxy-Windows-Build" }
     $release = Invoke-RestMethod -Uri $api -Headers $headers
     if (-not $release.assets) {
-        throw "No assets found in CLIProxyAPI release response"
+        throw "No assets found in CLIProxyAPIPlus release response"
     }
 
     $asset = $release.assets |
@@ -33,7 +33,7 @@ function Get-CliproxyDownloadUrl {
 
     if (-not $asset) {
         $assetNames = ($release.assets | Select-Object -ExpandProperty name) -join ', '
-        throw "Unable to locate Windows x64 asset in CLIProxyAPI release. Available assets: $assetNames"
+        throw "Unable to locate Windows x64 asset in CLIProxyAPIPlus release. Available assets: $assetNames"
     }
 
     return $asset.browser_download_url
@@ -47,7 +47,7 @@ $outputDir = Join-Path $repoRoot "out"
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 
 $cliproxyDownloadUrl = Get-CliproxyDownloadUrl -OverrideUri $CliproxyUri
-Write-Host "Using CLIProxyAPI asset: $cliproxyDownloadUrl"
+Write-Host "Using CLIProxyAPIPlus asset: $cliproxyDownloadUrl"
 
 if (-not (Test-Path $binaryPath)) {
     Write-Host "Downloading cli-proxy-api from $cliproxyDownloadUrl"
