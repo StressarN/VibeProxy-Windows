@@ -1,12 +1,17 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 namespace VibeProxy.Windows.Services;
 
 internal static class ThinkingModelTransformer
 {
     private const int HardCap = 32000;
+
+    private static readonly Regex OpenAIFastModePattern = new(
+        @"^(gpt-5(?:\.\d+)?(?:-codex)?)(?:-(none|minimal|low|medium|high|xhigh|max))?-fast$",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     public static (string Body, bool Modified) Apply(string body)
     {
@@ -29,8 +34,24 @@ internal static class ThinkingModelTransformer
             }
 
             var model = modelValue.GetValue<string>();
-            if (string.IsNullOrWhiteSpace(model) || !model.StartsWith("claude-", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(model))
             {
+                return (body, false);
+            }
+
+            var fastModeApplied = ApplyFastMode(node, model);
+            if (fastModeApplied)
+            {
+                model = node["model"]!.GetValue<string>();
+            }
+
+            if (!model.StartsWith("claude-", StringComparison.OrdinalIgnoreCase))
+            {
+                if (fastModeApplied)
+                {
+                    return (node.ToJsonString(new JsonSerializerOptions { WriteIndented = false }), true);
+                }
+
                 return (body, false);
             }
 
@@ -74,6 +95,36 @@ internal static class ThinkingModelTransformer
         {
             return (body, false);
         }
+    }
+
+    private static bool ApplyFastMode(JsonObject node, string model)
+    {
+        var match = OpenAIFastModePattern.Match(model.Trim());
+        if (!match.Success)
+        {
+            return false;
+        }
+
+        var baseModel = match.Groups[1].Value.ToLowerInvariant();
+        var normalizedModel = baseModel;
+
+        if (match.Groups[2].Success)
+        {
+            var level = match.Groups[2].Value.ToLowerInvariant();
+            normalizedModel = $"{baseModel}({level})";
+        }
+
+        node["model"] = normalizedModel;
+
+        var hasExplicitServiceTier = node["service_tier"] is JsonValue tierValue
+            && !string.IsNullOrWhiteSpace(tierValue.GetValue<string>());
+
+        if (!hasExplicitServiceTier)
+        {
+            node["service_tier"] = "priority";
+        }
+
+        return true;
     }
 
     private static void AdjustTokenField(JsonObject node, string propertyName, int desiredValue, int budget)
