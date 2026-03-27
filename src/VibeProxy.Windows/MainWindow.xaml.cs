@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using ButtonControl = System.Windows.Controls.Button;
 using CheckBoxControl = System.Windows.Controls.CheckBox;
 using VibeProxy.Windows.Models;
@@ -15,6 +16,24 @@ public partial class MainWindow : Window
     }
 
     private SettingsViewModel ViewModel => (SettingsViewModel)DataContext;
+
+    private void OnWindowDrag(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left)
+        {
+            DragMove();
+        }
+    }
+
+    private void OnMinimize(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    private void OnClose(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
 
     private async void OnToggleServer(object sender, RoutedEventArgs e)
     {

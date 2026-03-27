@@ -4,248 +4,517 @@
         xmlns:local="clr-namespace:VibeProxy.Windows"
         xmlns:viewModels="clr-namespace:VibeProxy.Windows.ViewModels"
         Title="VibeProxy"
-        Width="540"
-        Height="660"
+        Width="560"
+        Height="720"
         ResizeMode="CanMinimize"
-        Background="{DynamicResource WindowBackgroundBrush}">
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseLeftButtonDown="OnWindowDrag">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#11131A" />
-        <SolidColorBrush x:Key="SurfaceBrush" Color="#181B23" />
-        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#1E222C" />
-        <SolidColorBrush x:Key="AccentBrush" Color="#7C5CFF" />
-        <SolidColorBrush x:Key="AccentLightBrush" Color="#2D2750" />
-        <SolidColorBrush x:Key="NeutralBorderBrush" Color="#2D303C" />
-        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="DangerChipBrush" Color="#41252A" />
-        <SolidColorBrush x:Key="DangerChipBorderBrush" Color="#814651" />
-        <SolidColorBrush x:Key="SuccessChipBrush" Color="#1F2E26" />
-        <SolidColorBrush x:Key="SuccessChipBorderBrush" Color="#3B6B52" />
-        <SolidColorBrush x:Key="InfoChipBrush" Color="#222F42" />
-        <SolidColorBrush x:Key="InfoChipBorderBrush" Color="#325072" />
+
+        <!-- Color Palette: Deep space with warm amber accents -->
+        <Color x:Key="BgDeep">#0A0C10</Color>
+        <Color x:Key="BgBase">#0F1117</Color>
+        <Color x:Key="BgSurface">#151820</Color>
+        <Color x:Key="BgCard">#1A1D28</Color>
+        <Color x:Key="BgCardHover">#1F2330</Color>
+        <Color x:Key="BorderSubtle">#252938</Color>
+        <Color x:Key="BorderMedium">#303548</Color>
+        <Color x:Key="AccentAmber">#E8A642</Color>
+        <Color x:Key="AccentAmberDim">#C48A30</Color>
+        <Color x:Key="AccentTeal">#3DD6C8</Color>
+        <Color x:Key="TextBright">#F0F0F5</Color>
+        <Color x:Key="TextMuted">#8A8FA8</Color>
+        <Color x:Key="TextDim">#5A5F75</Color>
+        <Color x:Key="SuccessGreen">#34D399</Color>
+        <Color x:Key="SuccessBg">#0F2A1F</Color>
+        <Color x:Key="SuccessBorder">#1A4D35</Color>
+        <Color x:Key="DangerRed">#F87171</Color>
+        <Color x:Key="DangerBg">#2A1418</Color>
+        <Color x:Key="DangerBorder">#4D2530</Color>
+        <Color x:Key="OfflineBg">#1A1D28</Color>
+        <Color x:Key="OfflineBorder">#303548</Color>
+
+        <SolidColorBrush x:Key="BgDeepBrush" Color="{StaticResource BgDeep}" />
+        <SolidColorBrush x:Key="BgBaseBrush" Color="{StaticResource BgBase}" />
+        <SolidColorBrush x:Key="BgSurfaceBrush" Color="{StaticResource BgSurface}" />
+        <SolidColorBrush x:Key="BgCardBrush" Color="{StaticResource BgCard}" />
+        <SolidColorBrush x:Key="BgCardHoverBrush" Color="{StaticResource BgCardHover}" />
+        <SolidColorBrush x:Key="BorderSubtleBrush" Color="{StaticResource BorderSubtle}" />
+        <SolidColorBrush x:Key="BorderMediumBrush" Color="{StaticResource BorderMedium}" />
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentAmber}" />
+        <SolidColorBrush x:Key="AccentDimBrush" Color="{StaticResource AccentAmberDim}" />
+        <SolidColorBrush x:Key="AccentTealBrush" Color="{StaticResource AccentTeal}" />
+        <SolidColorBrush x:Key="TextBrightBrush" Color="{StaticResource TextBright}" />
+        <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMuted}" />
+        <SolidColorBrush x:Key="TextDimBrush" Color="{StaticResource TextDim}" />
+        <SolidColorBrush x:Key="SuccessGreenBrush" Color="{StaticResource SuccessGreen}" />
+        <SolidColorBrush x:Key="SuccessBgBrush" Color="{StaticResource SuccessBg}" />
+        <SolidColorBrush x:Key="SuccessBorderBrush" Color="{StaticResource SuccessBorder}" />
+        <SolidColorBrush x:Key="DangerRedBrush" Color="{StaticResource DangerRed}" />
+        <SolidColorBrush x:Key="DangerBgBrush" Color="{StaticResource DangerBg}" />
+        <SolidColorBrush x:Key="DangerBorderBrush" Color="{StaticResource DangerBorder}" />
+        <SolidColorBrush x:Key="OfflineBgBrush" Color="{StaticResource OfflineBg}" />
+        <SolidColorBrush x:Key="OfflineBorderBrush" Color="{StaticResource OfflineBorder}" />
+
+        <!-- Primary Button: warm amber gradient -->
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
-            <Setter Property="Padding" Value="16,8" />
-            <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
-            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="#0A0C10" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="6"
-                                Padding="{TemplateBinding Padding}" >
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"
-                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        <Border x:Name="Border" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#E8A642" Offset="0" />
+                                    <GradientStop Color="#D4923A" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
+                                              TextElement.FontWeight="Bold" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Opacity" Value="0.9" />
+                                <Setter TargetName="Border" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#F0B050" Offset="0" />
+                                            <GradientStop Color="#E09A40" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Opacity" Value="0.8" />
+                                <Setter TargetName="Border" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#C48A30" Offset="0" />
+                                            <GradientStop Color="#B07828" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Opacity" Value="0.4" />
+                                <Setter TargetName="Border" Property="Opacity" Value="0.35" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#252834" />
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
-            <Setter Property="Padding" Value="14,8" />
-            <Setter Property="BorderBrush" Value="{DynamicResource NeutralBorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
+
+        <!-- Ghost Button: transparent with border -->
+        <Style x:Key="GhostButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}" />
+            <Setter Property="FontSize" Value="11.5" />
+            <Setter Property="Padding" Value="14,7" />
+            <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="Transparent"
+                                BorderBrush="{StaticResource BorderSubtleBrush}"
+                                BorderThickness="1"
                                 CornerRadius="6"
                                 Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
                                               TextElement.Foreground="{TemplateBinding Foreground}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource TextDimBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource TextBrightBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#1D1F29" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource BgCardBrush}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Opacity" Value="0.4" />
+                                <Setter TargetName="Border" Property="Opacity" Value="0.3" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="ActionButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
+
+        <!-- Action Button for service cards -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="MinWidth" Value="88" />
-        </Style>
-        <Style x:Key="DarkCheckBoxStyle" TargetType="CheckBox">
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
-        </Style>
-        <Style x:Key="CardBorderStyle" TargetType="Border">
-            <Setter Property="BorderBrush" Value="{StaticResource NeutralBorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="10" />
-            <Setter Property="Padding" Value="16" />
-            <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}" />
-            <Setter Property="Effect">
+            <Setter Property="FontSize" Value="11.5" />
+            <Setter Property="MinWidth" Value="90" />
+            <Setter Property="Padding" Value="16,7" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="18" Opacity="0.35" ShadowDepth="0" Color="#60000000" />
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                Background="{StaticResource BgSurfaceBrush}"
+                                BorderBrush="{StaticResource BorderSubtleBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              TextElement.Foreground="{StaticResource TextMutedBrush}"
+                                              TextElement.FontWeight="SemiBold" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource AccentDimBrush}" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource BgCardHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource BgCardBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.3" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Checkbox style -->
+        <Style x:Key="DarkCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border x:Name="CheckBorder" Width="16" Height="16" CornerRadius="4"
+                                    BorderBrush="{StaticResource BorderMediumBrush}" BorderThickness="1.5"
+                                    Background="Transparent" VerticalAlignment="Center">
+                                <TextBlock x:Name="CheckMark" Text="&#x2713;" FontSize="11" FontWeight="Bold"
+                                           Foreground="{StaticResource AccentBrush}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Visibility="Collapsed" Margin="0,-1,0,0" />
+                            </Border>
+                            <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{StaticResource AccentDimBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{StaticResource TextDimBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Server Status Chip -->
         <Style x:Key="ServerStatusChipStyle" TargetType="Border">
-            <Setter Property="Padding" Value="8,3" />
-            <Setter Property="CornerRadius" Value="12" />
-            <Setter Property="Background" Value="{StaticResource SuccessChipBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource SuccessChipBorderBrush}" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="Background" Value="{StaticResource SuccessBgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SuccessBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsServerRunning}" Value="False">
-                    <Setter Property="Background" Value="{StaticResource DangerChipBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource DangerChipBorderBrush}" />
+                    <Setter Property="Background" Value="{StaticResource DangerBgBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource DangerBorderBrush}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <!-- Service Status Chip -->
         <Style x:Key="ServiceStatusChipStyle" TargetType="Border">
-            <Setter Property="Padding" Value="6,2" />
+            <Setter Property="Padding" Value="8,3" />
             <Setter Property="CornerRadius" Value="12" />
-            <Setter Property="Background" Value="{StaticResource InfoChipBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource InfoChipBorderBrush}" />
+            <Setter Property="Background" Value="{StaticResource OfflineBgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource OfflineBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                    <Setter Property="Background" Value="{StaticResource SuccessChipBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource SuccessChipBorderBrush}" />
+                    <Setter Property="Background" Value="{StaticResource SuccessBgBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource SuccessBorderBrush}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <!-- Custom ScrollBar -->
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="6" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Track x:Name="PART_Track" IsDirectionReversed="True">
+                            <Track.Thumb>
+                                <Thumb>
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border Background="#2A2F42" CornerRadius="3" Margin="1,0" />
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="{StaticResource WindowBackgroundBrush}">
-        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Top" Background="{StaticResource WindowBackgroundBrush}" TextElement.Foreground="{StaticResource TextPrimaryBrush}">
-            <Border Style="{StaticResource CardBorderStyle}">
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <TextBlock Text="Server" FontWeight="Bold" FontSize="16" />
-                            <TextBlock Text="{Binding ServerStatusText}" Margin="0,4,0,0" Foreground="{StaticResource TextSecondaryBrush}" />
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                            <Border Style="{StaticResource ServerStatusChipStyle}" HorizontalAlignment="Right" Margin="0,0,0,8">
-                                <TextBlock Text="{Binding ServerStateLabel}" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
-                            </Border>
-                            <Button Content="Toggle" Width="120" Style="{StaticResource PrimaryButtonStyle}" Click="OnToggleServer" />
-                        </StackPanel>
-                    </Grid>
-                    <WrapPanel Margin="0,16,0,0" ItemHeight="32" ItemWidth="140" Orientation="Horizontal" MinHeight="32" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                        <CheckBox Content="Launch at login"
-                                  IsChecked="{Binding LaunchAtLoginEnabled, Mode=OneWay}"
-                                  Click="OnLaunchAtLoginClick"
-                                  Style="{StaticResource DarkCheckBoxStyle}"
-                                  Margin="0,0,10,10" />
-                        <Button Content="Copy server URL" Click="OnCopyServerUrl" Margin="0,0,10,10" Style="{StaticResource SecondaryButtonStyle}" />
-                        <Button Content="Open auth folder" Click="OnOpenAuthFolder" Margin="0,0,10,10" Style="{StaticResource SecondaryButtonStyle}" />
-                    </WrapPanel>
+
+    <!-- Main outer border with rounded corners and subtle glow -->
+    <Border CornerRadius="14" Background="{StaticResource BgBaseBrush}"
+            BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="40" Opacity="0.6" ShadowDepth="0" Color="#000000" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Custom Title Bar -->
+            <Grid Grid.Row="0" Background="Transparent">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                    <Ellipse Width="8" Height="8" Margin="0,0,6,0">
+                        <Ellipse.Fill>
+                            <SolidColorBrush Color="{StaticResource AccentAmber}" />
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <TextBlock Text="VibeProxy" FontSize="12" FontWeight="Bold"
+                               Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"
+                               FontFamily="Segoe UI" />
                 </StackPanel>
-            </Border>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0">
+                    <Button Click="OnMinimize" Width="32" Height="28" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bg" Background="Transparent" CornerRadius="4">
+                                    <TextBlock Text="&#x2014;" FontSize="10" Foreground="{StaticResource TextDimBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bg" Property="Background" Value="{StaticResource BgCardBrush}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Click="OnClose" Width="32" Height="28" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bg" Background="Transparent" CornerRadius="4">
+                                    <TextBlock Text="&#x2715;" FontSize="10" Foreground="{StaticResource TextDimBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bg" Property="Background" Value="{StaticResource DangerBgBrush}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Grid>
 
-            <StackPanel Margin="0,20,0,0">
-                <TextBlock Text="Services" FontWeight="Bold" FontSize="15" />
-                <ItemsControl Margin="0,12,0,0" ItemsSource="{Binding ServiceCards}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Margin" Value="0,0,0,12" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type viewModels:ServiceCardViewModel}">
-                            <Border Style="{StaticResource CardBorderStyle}" Padding="14">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Border Width="40" Height="40" Background="{StaticResource AccentLightBrush}" CornerRadius="8" VerticalAlignment="Center">
-                                            <Image Source="{Binding IconPath}" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                        <StackPanel Margin="12,0,0,0">
-                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
-                                            <TextBlock Text="{Binding StatusText}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,2,0,0" />
+            <!-- Content Area -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="24,4,24,20" TextElement.Foreground="{StaticResource TextBrightBrush}">
+
+                    <!-- === SERVER SECTION === -->
+                    <Border CornerRadius="12" Padding="20,18"
+                            Background="{StaticResource BgCardBrush}"
+                            BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Server info -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="S E R V E R" FontWeight="Bold" FontSize="11"
+                                               Foreground="{StaticResource TextDimBrush}" />
+                                    <Border Style="{StaticResource ServerStatusChipStyle}" Margin="12,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding ServerStateLabel}" FontWeight="SemiBold" FontSize="10.5"
+                                                   Foreground="{StaticResource TextBrightBrush}" />
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock Text="{Binding ServerStatusText}" Margin="0,6,0,0" FontSize="13"
+                                           Foreground="{StaticResource TextMutedBrush}" />
+                            </StackPanel>
+
+                            <!-- Toggle button -->
+                            <Button Grid.Column="1" Grid.Row="0" Content="Toggle" Width="110"
+                                    Style="{StaticResource PrimaryButtonStyle}" Click="OnToggleServer"
+                                    VerticalAlignment="Center" />
+
+                            <!-- Quick actions row -->
+                            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,16,0,0">
+                                <CheckBox Content="Launch at login"
+                                          IsChecked="{Binding LaunchAtLoginEnabled, Mode=OneWay}"
+                                          Click="OnLaunchAtLoginClick"
+                                          Style="{StaticResource DarkCheckBoxStyle}"
+                                          Margin="0,0,16,0" VerticalAlignment="Center" />
+                                <Button Content="Copy URL" Click="OnCopyServerUrl"
+                                        Style="{StaticResource GhostButtonStyle}" Margin="0,0,8,0" />
+                                <Button Content="Auth Folder" Click="OnOpenAuthFolder"
+                                        Style="{StaticResource GhostButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- === SERVICES SECTION === -->
+                    <TextBlock Text="S E R V I C E S" FontWeight="Bold" FontSize="11"
+                               Foreground="{StaticResource TextDimBrush}" Margin="4,24,0,12" />
+
+                    <ItemsControl ItemsSource="{Binding ServiceCards}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Margin" Value="0,0,0,8" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type viewModels:ServiceCardViewModel}">
+                                <Border CornerRadius="10" Padding="14,12"
+                                        Background="{StaticResource BgCardBrush}"
+                                        BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Icon + Name -->
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Border Width="38" Height="38" CornerRadius="10" VerticalAlignment="Center">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                        <GradientStop Color="#1A1D28" Offset="0" />
+                                                        <GradientStop Color="#252938" Offset="1" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <Image Source="{Binding IconPath}" Width="22" Height="22"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                       RenderOptions.BitmapScalingMode="HighQuality" />
+                                            </Border>
+                                            <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"
+                                                           Foreground="{StaticResource TextBrightBrush}" />
+                                                <TextBlock Text="{Binding StatusText}" FontSize="11"
+                                                           Foreground="{StaticResource TextDimBrush}" Margin="0,2,0,0" />
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Border Style="{StaticResource ServiceStatusChipStyle}" Margin="0,0,8,0">
-                                            <TextBlock Text="{Binding StatusChipText}" FontWeight="SemiBold" FontSize="12" Foreground="{StaticResource TextPrimaryBrush}" />
-                                        </Border>
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,0,8,0">
-                                            <TextBlock Text="Authorizing" Margin="0,0,6,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" />
-                                            <ProgressBar Width="60" Height="6" IsIndeterminate="True" Foreground="{StaticResource AccentBrush}" Background="#262B38" />
+
+                                        <!-- Status + Actions -->
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Border Style="{StaticResource ServiceStatusChipStyle}" Margin="0,0,10,0"
+                                                    VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Ellipse Width="6" Height="6" Margin="0,0,5,0" VerticalAlignment="Center">
+                                                        <Ellipse.Style>
+                                                            <Style TargetType="Ellipse">
+                                                                <Setter Property="Fill" Value="{StaticResource TextDimBrush}" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                                                        <Setter Property="Fill" Value="{StaticResource SuccessGreenBrush}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Ellipse.Style>
+                                                    </Ellipse>
+                                                    <TextBlock Text="{Binding StatusChipText}" FontWeight="SemiBold" FontSize="10.5"
+                                                               Foreground="{StaticResource TextMutedBrush}" />
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- Busy indicator -->
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                        Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        Margin="0,0,10,0">
+                                                <ProgressBar Width="50" Height="3" IsIndeterminate="True"
+                                                             Foreground="{StaticResource AccentBrush}" Background="#1A1D28" />
+                                            </StackPanel>
+
+                                            <Button Content="Connect"
+                                                    Visibility="{Binding IsConnected, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                                    Style="{StaticResource ActionButtonStyle}"
+                                                    Tag="{Binding Provider}"
+                                                    Click="OnConnectService" />
+                                            <Button Content="Disconnect"
+                                                    Visibility="{Binding IsConnected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    Style="{StaticResource ActionButtonStyle}"
+                                                    Tag="{Binding Provider}"
+                                                    Click="OnDisconnectService" />
                                         </StackPanel>
-                                        <Button Content="Connect"
-                                                Visibility="{Binding IsConnected, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-                                                Style="{StaticResource ActionButtonStyle}"
-                                                Tag="{Binding Provider}"
-                                                Click="OnConnectService"
-                                                Margin="0,0,8,0" />
-                                        <Button Content="Disconnect"
-                                                Visibility="{Binding IsConnected, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                Style="{StaticResource ActionButtonStyle}"
-                                                Tag="{Binding Provider}"
-                                                Click="OnDisconnectService" />
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-            <StackPanel Margin="0,20,0,0">
-                <TextBlock Text="Logs" FontWeight="Bold" />
-                <Border Margin="0,10,0,0" Padding="0" BorderThickness="1" BorderBrush="{StaticResource NeutralBorderBrush}" CornerRadius="8" Background="{StaticResource SurfaceBrush}">
-                    <ListBox ItemsSource="{Binding LogLines}"
-                             Height="180"
-                             FontFamily="Consolas"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="{StaticResource TextPrimaryBrush}"
-                             Margin="4" />
-                </Border>
-            </StackPanel>
+                    <!-- === LOGS SECTION === -->
+                    <TextBlock Text="L O G S" FontWeight="Bold" FontSize="11"
+                               Foreground="{StaticResource TextDimBrush}" Margin="4,20,0,10" />
 
-            <TextBlock Text="{Binding VersionText}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,4,0,20" />
-        </StackPanel>
-    </ScrollViewer>
+                    <Border CornerRadius="10" Padding="0"
+                            Background="{StaticResource BgSurfaceBrush}"
+                            BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1">
+                        <ListBox ItemsSource="{Binding LogLines}"
+                                 Height="160"
+                                 FontFamily="Cascadia Mono, Consolas"
+                                 FontSize="11"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="{StaticResource TextDimBrush}"
+                                 Margin="6,6,2,6"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="6,2" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border Padding="{TemplateBinding Padding}" Background="Transparent">
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </Border>
+
+                    <!-- Version footer -->
+                    <TextBlock Text="{Binding VersionText}" FontSize="10"
+                               Foreground="{StaticResource TextDimBrush}"
+                               HorizontalAlignment="Center" Margin="0,14,0,0" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
 </Window>

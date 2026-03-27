@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 using WinMessageBox = System.Windows.MessageBox;
 
 namespace VibeProxy.Windows;
@@ -14,6 +15,14 @@ public partial class QwenEmailDialog : Window
     }
 
     public string Email => EmailBox.Text.Trim();
+
+    private void OnDialogDrag(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left)
+        {
+            DragMove();
+        }
+    }
 
     private void OnCancel(object sender, RoutedEventArgs e)
     {

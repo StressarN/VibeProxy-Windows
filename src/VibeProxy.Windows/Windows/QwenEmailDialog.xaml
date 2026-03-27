@@ -4,13 +4,88 @@
         Title="Qwen Email"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
-        ResizeMode="NoResize">
-    <StackPanel Margin="24" Width="320">
-        <TextBlock Text="Enter your Qwen account email" FontWeight="SemiBold" />
-        <TextBox x:Name="EmailBox" Margin="0,8,0,0" />
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-            <Button Content="Cancel" Click="OnCancel" Margin="0,0,8,0" />
-            <Button Content="Continue" IsDefault="True" Click="OnContinue" />
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+    <Window.Resources>
+        <SolidColorBrush x:Key="BgBase" Color="#0F1117" />
+        <SolidColorBrush x:Key="BgCard" Color="#1A1D28" />
+        <SolidColorBrush x:Key="BorderSubtle" Color="#252938" />
+        <SolidColorBrush x:Key="TextBright" Color="#F0F0F5" />
+        <SolidColorBrush x:Key="TextMuted" Color="#8A8FA8" />
+        <SolidColorBrush x:Key="TextDim" Color="#5A5F75" />
+        <SolidColorBrush x:Key="AccentAmber" Color="#E8A642" />
+    </Window.Resources>
+    <Border CornerRadius="12" Background="{StaticResource BgBase}"
+            BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1"
+            MouseLeftButtonDown="OnDialogDrag">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="30" Opacity="0.5" ShadowDepth="0" Color="#000000" />
+        </Border.Effect>
+        <StackPanel Margin="28,24,28,24" Width="320">
+            <TextBlock Text="QWEN AUTHENTICATION" FontWeight="Bold" FontSize="11"
+                       Foreground="{StaticResource TextDim}" />
+            <TextBlock Text="Enter your account email" FontSize="13" Margin="0,8,0,0"
+                       Foreground="{StaticResource TextMuted}" />
+            <Border Margin="0,16,0,0" CornerRadius="8" Padding="12,10"
+                    Background="{StaticResource BgCard}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1">
+                <TextBox x:Name="EmailBox" Background="Transparent" BorderThickness="0"
+                         Foreground="{StaticResource TextBright}" FontSize="13"
+                         CaretBrush="{StaticResource AccentAmber}" FontFamily="Segoe UI" />
+            </Border>
+            <Grid Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Content="Cancel" Click="OnCancel" Margin="0,0,8,0" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Bg" Background="Transparent" CornerRadius="6" Padding="16,8"
+                                    BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  TextElement.Foreground="{StaticResource TextMuted}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bg" Property="Background" Value="{StaticResource BgCard}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Grid.Column="2" Content="Continue" IsDefault="True" Click="OnContinue" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Bg" CornerRadius="6" Padding="16,8">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#E8A642" Offset="0" />
+                                        <GradientStop Color="#D4923A" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  TextElement.Foreground="#0A0C10"
+                                                  TextElement.FontWeight="Bold" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bg" Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#F0B050" Offset="0" />
+                                                <GradientStop Color="#E09A40" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
         </StackPanel>
-    </StackPanel>
+    </Border>
 </Window>
